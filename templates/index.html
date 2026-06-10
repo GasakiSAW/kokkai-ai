@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>国会AI分析</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<form method="GET">
+    <div>
+        <label>キーワード:</label>
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="議員名やキーワード">
+    </div>
+
+    <div>
+        <label>開始日:</label>
+        <input type="date" name="from_date" value="{{ from_date }}">
+    </div>
+
+    <div>
+        <label>終了日:</label>
+        <input type="date" name="until_date" value="{{ until_date }}">
+    </div>
+
+    <button type="submit">検索</button>
+</form>
+
+<p>検索期間: {{ from_date }} ～ {{ until_date }}</p>
+
+<hr>
+
+<h2>話題ランキング TOP10</h2>
+
+{% for topic, count in topic_ranking[:10] %}
+<div style="border:1px solid #666;padding:10px;margin:10px;">
+    <b>{{ loop.index }}位 <a href="/topic/{{ topic }}?from_date={{ from_date }}&until_date={{ until_date }}">{{ topic }}</a></b>
+    <p>関連発言数: {{ count }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>テーマ別ページ</h2>
+
+{% for theme, count in theme_counts.items() %}
+<div>
+    <a href="/theme/{{ theme }}?from_date={{ from_date }}&until_date={{ until_date }}">
+        {{ theme }}
+    </a>
+    （{{ count }}件）
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>会議別ページ</h2>
+
+{% for meeting, count in meeting_counts.items() %}
+<div>
+    <a href="/meeting/{{ meeting }}?from_date={{ from_date }}&until_date={{ until_date }}">
+        {{ meeting }}
+    </a>
+    （{{ count }}件）
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>議員ランキング TOP10</h2>
+
+{% for r in ranking[:10] %}
+<div style="border:1px solid #999;padding:10px;margin:10px;">
+    <b>{{ loop.index }}位 
+        <a href="/member/{{ r.speaker }}?from_date={{ from_date }}&until_date={{ until_date }}">
+            {{ r.speaker }}
+        </a>
+    </b>
+    <p>合計スコア: {{ r.total_score }}</p>
+    <p>発言数: {{ r.count }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>発言一覧</h2>
+
+{% for r in results %}
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+    <h3>
+        <a href="/member/{{ r.speaker }}?from_date={{ from_date }}&until_date={{ until_date }}">
+            {{ r.speaker }}
+        </a>
+    </h3>
+    <p><b>日付:</b> {{ r.date }}</p>
+    <p><b>会議:</b> {{ r.meeting }}</p>
+    <p><b>テーマ:</b> {{ r.theme }}</p>
+    <p><b>スコア:</b> {{ r.score }}</p>
+    <p>{{ r.summary }}</p>
+    <a href="/speech/{{ r.id }}?from_date={{ from_date }}&until_date={{ until_date }}&keyword={{ keyword }}">全文を見る</a>
+</div>
+{% endfor %}
+
+</body>
+</html>
+
+

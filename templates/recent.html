@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>最近の国会発言</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>最近の国会発言</h2>
+
+<p>{{ from_date }} ～ {{ until_date }}</p>
+
+<form method="GET">
+    <input type="text" name="keyword" value="{{ keyword }}" placeholder="議員名やキーワード">
+    <button type="submit">検索</button>
+</form>
+
+<hr>
+
+<h2>最近の議員ランキング TOP10</h2>
+
+{% for r in ranking[:10] %}
+<div style="border:1px solid #999;padding:10px;margin:10px;">
+    <b>{{ loop.index }}位 {{ r.speaker }}</b>
+    <p>合計スコア: {{ r.total_score }}</p>
+    <p>発言数: {{ r.count }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>最近の発言一覧</h2>
+
+{% for r in results %}
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+    <h3>{{ r.speaker }}</h3>
+    <p><b>日付:</b> {{ r.date }}</p>
+    <p><b>会議:</b> {{ r.meeting }}</p>
+    <p><b>テーマ:</b> {{ r.theme }}</p>
+    <p><b>スコア:</b> {{ r.score }}</p>
+    <p>{{ r.summary }}</p>
+</div>
+{% endfor %}
+
+</body>
+</html>

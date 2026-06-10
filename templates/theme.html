@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ theme_name }} - 国会AI分析</title>
+</head>
+<body>
+
+<a href="/">トップへ戻る</a>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1><h2>{{ theme_name }} の発言</h2>
+
+<h2>{{ theme_name }} 議員ランキング TOP10</h2>
+
+{% for r in ranking[:10] %}
+<div style="border:1px solid #999;padding:10px;margin:10px;">
+    <b>{{ loop.index }}位 {{ r.speaker }}</b>
+    <p>合計スコア: {{ r.total_score }}</p>
+    <p>発言数: {{ r.count }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>発言一覧</h2>
+
+{% for r in results %}
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+    <h3>{{ r.speaker }}</h3>
+    <p><b>スコア:</b> {{ r.score }}</p>
+    <p>{{ r.summary }}</p>
+    <a href="/speech/{{ r.id }}">全文を見る</a>
+</div>
+{% endfor %}
+
+</body>
+</html>

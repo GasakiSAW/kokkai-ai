@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ meeting_name }} - 国会AI分析</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>{{ meeting_name }}</h2>
+
+<p>対象期間: {{ from_date }} ～ {{ until_date }}</p>
+<p>発言数: {{ results|length }}</p>
+
+<hr>
+
+<h2>{{ meeting_name }} 議員ランキング TOP10</h2>
+
+{% for r in ranking[:10] %}
+<div style="border:1px solid #999;padding:10px;margin:10px;">
+    <b>{{ loop.index }}位 {{ r.speaker }}</b>
+    <p>合計スコア: {{ r.total_score }}</p>
+    <p>発言数: {{ r.count }}</p>
+</div>
+{% endfor %}
+
+<hr>
+
+<h2>発言一覧</h2>
+
+{% for r in results %}
+<div style="border:1px solid #ccc;padding:10px;margin:10px;">
+    <h3>{{ r.speaker }}</h3>
+    <p><b>日付:</b> {{ r.date }}</p>
+    <p><b>テーマ:</b> {{ r.theme }}</p>
+    <p><b>スコア:</b> {{ r.score }}</p>
+    <p>{{ r.summary }}</p>
+    <a href="/speech/{{ r.id }}?from_date={{ from_date }}&until_date={{ until_date }}">全文を見る</a>
+</div>
+{% endfor %}
+
+</body>
+</html>
