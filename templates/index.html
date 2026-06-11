@@ -29,6 +29,18 @@
 
 <p>検索期間: {{ from_date }} ～ {{ until_date }}</p>
 
+<p>
+    <a href="/summary?keyword={{ keyword }}&from_date={{ from_date }}&until_date={{ until_date }}">
+        議会全体をAI要約する
+    </a>
+</p>
+
+<p>
+    <a href="/meeting-summaries?keyword={{ keyword }}&from_date={{ from_date }}&until_date={{ until_date }}">
+        会議録ごとにAI要約する
+    </a>
+</p>
+
 <hr>
 
 <h2>話題ランキング TOP10</h2>
@@ -84,6 +96,19 @@
 
 <hr>
 
+<h2>この議会で発言した人</h2>
+
+{% for speaker, count in speaker_counts.items() %}
+<div>
+    <a href="/member/{{ speaker }}?from_date={{ from_date }}&until_date={{ until_date }}">
+        {{ speaker }}
+    </a>
+    ：{{ count }}回
+</div>
+{% endfor %}
+
+<hr>
+
 <h2>発言一覧</h2>
 
 {% for r in results %}
@@ -104,5 +129,8 @@
 
 </body>
 </html>
+
+
+
 
 

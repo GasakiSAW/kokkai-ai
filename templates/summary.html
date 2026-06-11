@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>議会要約</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>議会全体のAI要約</h2>
+
+<p>対象期間: {{ from_date }} ～ {{ until_date }}</p>
+<p>対象発言数: {{ results|length }}</p>
+
+<hr>
+
+<h2>一言要約</h2>
+<p>{{ summary.one_line_summary }}</p>
+
+<hr>
+
+<h2>全体要約</h2>
+<p style="white-space: pre-wrap;">{{ summary.overall_summary }}</p>
+
+<hr>
+
+<h2>主な議題</h2>
+<ul>
+{% for item in summary.main_topics %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h2>重要な論点</h2>
+<ul>
+{% for item in summary.important_points %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h2>対立点・争点</h2>
+<ul>
+{% for item in summary.conflicts %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h2>今後確認すべき統計指標</h2>
+<ul>
+{% for item in summary.metrics_to_check %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>

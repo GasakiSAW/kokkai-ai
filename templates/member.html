@@ -2,27 +2,62 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>{{ speaker_name }} - 国会AI分析</title>
+    <title>{{ speaker_name }}</title>
 </head>
 <body>
 
 <h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
 
-<h2>{{ speaker_name }} の発言ページ</h2>
+<h2>{{ speaker_name }}</h2>
 
-<p>対象期間: {{ from_date }} ～ {{ until_date }}</p>
+<p>期間: {{ from_date }} ～ {{ until_date }}</p>
 <p>発言数: {{ results|length }}</p>
 <p>合計スコア: {{ total_score }}</p>
 
 <hr>
 
-<h2>テーマ内訳</h2>
+<h2>AI議員要約</h2>
 
-{% for theme, count in theme_counts.items() %}
-<div>
-    {{ theme }}：{{ count }}件
-</div>
+<h3>主なテーマ</h3>
+<ul>
+{% for item in member_summary.main_topics %}
+<li>{{ item }}</li>
 {% endfor %}
+</ul>
+
+<h3>政策姿勢</h3>
+<ul>
+{% for item in member_summary.policy_positions %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>強み</h3>
+<ul>
+{% for item in member_summary.strengths %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>弱み・課題</h3>
+<ul>
+{% for item in member_summary.weaknesses %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>総評</h3>
+<p style="white-space: pre-wrap;">{{ member_summary.overall_comment }}</p>
+
+<hr>
+
+<h2>テーマ別発言数</h2>
+
+<ul>
+{% for theme, count in theme_counts.items() %}
+<li>{{ theme }}：{{ count }}件</li>
+{% endfor %}
+</ul>
 
 <hr>
 

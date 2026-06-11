@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>会議録ごとのAI要約</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>会議録ごとのAI要約</h2>
+
+<p>期間: {{ from_date }} ～ {{ until_date }}</p>
+
+<hr>
+
+{% for meeting, item in summaries.items() %}
+
+<div style="border:1px solid #999; padding:15px; margin:15px;">
+    <h3>{{ meeting }}</h3>
+
+    <p><b>要約:</b><br>{{ item.summary }}</p>
+
+    <p><b>主な議題:</b></p>
+    <ul>
+    {% for topic in item.main_topics %}
+        <li>{{ topic }}</li>
+    {% endfor %}
+    </ul>
+
+    <p><b>重要な論点:</b></p>
+    <ul>
+    {% for point in item.important_points %}
+        <li>{{ point }}</li>
+    {% endfor %}
+    </ul>
+</div>
+
+{% endfor %}
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>
