@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>会議タイムライン</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>会議タイムライン</h2>
+
+<p>期間: {{ from_date }} ～ {{ until_date }}</p>
+
+<hr>
+
+{% for item in timeline %}
+
+<div style="border:1px solid #999; padding:15px; margin:15px;">
+    <h3>{{ item.date }}　{{ item.meeting }}</h3>
+
+    <p>発言数: {{ item.count }}</p>
+
+    <p><b>主なテーマ:</b></p>
+    <ul>
+    {% for theme in item.themes %}
+        <li>{{ theme }}</li>
+    {% endfor %}
+    </ul>
+
+    <p><b>主な発言者:</b></p>
+    <ul>
+    {% for speaker in item.speakers %}
+        <li>
+            <a href="/member/{{ speaker }}?from_date={{ from_date }}&until_date={{ until_date }}">
+                {{ speaker }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <p><b>代表的な発言:</b></p>
+    {% for r in item.rows %}
+        <div style="border:1px solid #ccc; padding:8px; margin:8px;">
+            <b>{{ r.speaker }}</b>
+            <p>{{ r.summary }}</p>
+            <a href="/speech/{{ r.id }}?from_date={{ from_date }}&until_date={{ until_date }}&keyword={{ keyword }}">
+                全文を見る
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endfor %}
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>

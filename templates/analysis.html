@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>AI分析結果</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>{{ speech.speaker }} のAI分析</h1>
+
+<p>
+    <b>日付:</b> {{ speech.date }}<br>
+    <b>会議:</b> {{ speech.meeting }}
+</p>
+
+<hr>
+
+<h2>AI政策分析</h2>
+
+<p><b>主張:</b><br>{{ ai_result.claim }}</p>
+<p><b>根拠:</b><br>{{ ai_result.reason }}</p>
+<p><b>テーマ:</b><br>{{ ai_result.theme }}</p>
+<p><b>対象者:</b><br>{{ ai_result.target }}</p>
+<p><b>期待される効果:</b><br>{{ ai_result.expected_effect }}</p>
+
+<p><b>検証指標:</b></p>
+<ul>
+{% for metric in ai_result.metrics %}
+<li>{{ metric }}</li>
+{% endfor %}
+</ul>
+
+<p><b>反対意見:</b><br>{{ ai_result.counter_argument }}</p>
+<p><b>評価方法:</b><br>{{ ai_result.evaluation_method }}</p>
+
+<hr>
+
+<h2>AI主張検証</h2>
+
+<div style="border:2px solid #444; padding:15px; margin:10px 0;">
+    <p><b>判定:</b> {{ claim_verification.verdict }}</p>
+    <p><b>信頼度:</b> {{ claim_verification.confidence }}</p>
+    <p><b>要約:</b><br>{{ claim_verification.summary }}</p>
+
+    <p><b>主張を支持する統計:</b></p>
+    <ul>
+    {% for item in claim_verification.supporting_evidence %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+
+    <p><b>主張に反する統計:</b></p>
+    <ul>
+    {% for item in claim_verification.contradicting_evidence %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+
+    <p><b>注意点:</b><br>{{ claim_verification.caution }}</p>
+</div>
+
+<hr>
+
+<h2>政策評価</h2>
+
+<div style="border:2px solid #333; padding:15px; margin:10px 0;">
+    <h3>総合評価：{{ policy_score.grade }} / {{ policy_score.score }}点</h3>
+    <p>
+        改善：{{ policy_score.improve }}件 /
+        悪化：{{ policy_score.worse }}件 /
+        不明：{{ policy_score.unknown }}件
+    </p>
+</div>
+
+<h3>詳細評価</h3>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>検証指標</th>
+        <th>評価</th>
+        <th>変化量</th>
+        <th>点数</th>
+        <th>評価ルール</th>
+    </tr>
+    {% for item in policy_score.details %}
+    <tr>
+        <td>{{ item.metric }}</td>
+        <td>{{ item.evaluation }}</td>
+        <td>{{ item.change }}</td>
+        <td>{{ item.point }}</td>
+        <td>{{ item.rule }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<h2>統計推移グラフ</h2>
+
+{% for chart in chart_data %}
+
+<h3>{{ chart.metric }}</h3>
+
+<canvas id="chart{{ loop.index }}" width="700" height="350"></canvas>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>年</th>
+        <th>値</th>
+        <th>単位</th>
+    </tr>
+    {% for row in chart.series %}
+    <tr>
+        <td>{{ row.year }}</td>
+        <td>{{ row.value }}</td>
+        <td>{{ row.unit }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+const rawData{{ loop.index }} = {{ chart.series | tojson }};
+
+const cleanData{{ loop.index }} = rawData{{ loop.index }}.filter(row => {
+    const value = Number(row.value);
+    return !isNaN(value);
+});
+
+new Chart(
+    document.getElementById("chart{{ loop.index }}"),
+    {
+        type: "line",
+        data: {
+            labels: cleanData{{ loop.index }}.map(row => row.year),
+            datasets: [{
+                label: "{{ chart.metric }}",
+                data: cleanData{{ loop.index }}.map(row => Number(row.value)),
+                tension: 0.2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    }
+);
+</script>
+
+{% endfor %}
+
+<hr>
+
+<h2>関連する政府統計候補</h2>
+
+{% for metric, stats in metrics_data.items() %}
+<h3>{{ metric }}</h3>
+<ul>
+{% for stat in stats %}
+<li>
+    <b>{{ stat.title }}</b><br>
+    統計名: {{ stat.stat_name }}<br>
+    統計ID: {{ stat.stats_data_id }}<br>
+    {% if stat.latest %}
+        最新値: {{ stat.latest.value }}{{ stat.latest.unit }}<br>
+        年度: {{ stat.latest.year }}
+    {% else %}
+        最新値: 取得できませんでした
+    {% endif %}
+</li>
+<br>
+{% endfor %}
+</ul>
+{% endfor %}
+
+<hr>
+
+<p>
+    <a href="/speech/{{ speech_id }}?from_date={{ from_date }}&until_date={{ until_date }}&keyword={{ keyword }}">
+        発言全文へ戻る
+    </a>
+</p>
+
+<p>
+    <a href="/">ホームへ戻る</a>
+</p>
+
+</body>
+</html>

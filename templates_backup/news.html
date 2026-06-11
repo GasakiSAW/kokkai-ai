@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>国会ニュース</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>国会ニュース</h2>
+
+<p>期間: {{ from_date }} ～ {{ until_date }}</p>
+
+<hr>
+
+<h2>{{ news.headline }}</h2>
+
+<p><b>リード:</b><br>{{ news.lead }}</p>
+
+<hr>
+
+<h3>記事本文</h3>
+
+<p style="white-space: pre-wrap;">{{ news.article }}</p>
+
+<hr>
+
+<h3>主な論点</h3>
+<ul>
+{% for item in news.main_topics %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>賛成・支持側の見方</h3>
+<ul>
+{% for item in news.supporting_views %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>反対・慎重側の見方</h3>
+<ul>
+{% for item in news.opposing_views %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<h3>今後見るべき統計</h3>
+<ul>
+{% for item in news.metrics_to_watch %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>

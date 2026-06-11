@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>政党比較</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>政党比較ページ</h2>
+
+<hr>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>順位</th>
+        <th>政党</th>
+        <th>公約達成率</th>
+        <th>総合評価</th>
+        <th>評価公約数</th>
+    </tr>
+
+    {% for party in party_ranking %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+            <a href="/party/{{ party.party_name }}">
+                {{ party.party_name }}
+            </a>
+        </td>
+        <td>{{ party.achievement_rate }}%</td>
+        <td>{{ party.grade }}</td>
+        <td>{{ party.promise_count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>

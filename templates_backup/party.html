@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ party_name }}</title>
+</head>
+<body>
+
+<h1><a href="/" style="text-decoration:none;color:black;">国会AI分析</a></h1>
+
+<h2>{{ party_name }}</h2>
+
+<div style="border:2px solid #333; padding:15px; margin:15px;">
+    <h2>公約達成率：{{ party_achievement.achievement_rate }}%</h2>
+    <p>総合評価：{{ party_achievement.grade }}</p>
+</div>
+
+<hr>
+
+<h2>AI政党評価</h2>
+
+<div style="border:1px solid #999;padding:15px;margin:15px;">
+{{ party_report }}
+</div>
+
+<hr>
+
+<h2>所属議員</h2>
+
+<ul>
+{% for member in members %}
+<li>
+    <a href="/member/{{ member }}">{{ member }}</a>
+</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h2>公約評価</h2>
+
+{% for item in party_results %}
+
+<div style="border:1px solid #999; padding:15px; margin:15px;">
+
+    <h3>{{ item.theme }}</h3>
+
+<p><b>公約達成率:</b> {{ item.achievement_rate }}%</p>
+
+    <p><b>公約:</b><br>
+    {{ item.promise }}</p>
+
+    <p><b>評価:</b>
+    {{ item.score.grade }} / {{ item.score.score }}点
+    </p>
+
+    <p>
+    改善: {{ item.score.improve }} /
+    悪化: {{ item.score.worse }} /
+    不明: {{ item.score.unknown }}
+    </p>
+
+    <h4>指標別評価</h4>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>指標</th>
+            <th>評価</th>
+            <th>変化量</th>
+            <th>点数</th>
+        </tr>
+
+        {% for detail in item.score.details %}
+        <tr>
+            <td>{{ detail.metric }}</td>
+            <td>{{ detail.evaluation }}</td>
+            <td>{{ detail.change }}</td>
+            <td>{{ detail.point }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endfor %}
+
+<hr>
+
+<a href="/">ホームへ戻る</a>
+
+</body>
+</html>
+
+
